@@ -3,7 +3,7 @@ import sqlite3 as sql
 
 flag = True
 
-connection = sql.connect("product_base.db")
+connection = sql.connect("../product_base.db")
 cursor = connection.cursor()
 
 if flag:

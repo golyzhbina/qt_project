@@ -1,7 +1,8 @@
 import sys
 
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel
-from reg_form_py import Ui_Form
+from .reg_form_py import Ui_Form
+from main_window.class_main_window import MainWindow
 from sqlite3 import connect
 
 
@@ -21,9 +22,7 @@ class RegistrationWindow(QWidget, Ui_Form):
         self.pushButton_calc.clicked.connect(self.calc)
         self.pushButton_ok.clicked.connect(self.save)
 
-        self.connection = connect('users.db')
-        self.warning = QLabel(self)
-        self.warning.setGeometry(10, 475, 200, 40)
+        self.connection = connect('../users.db')
 
         for st in ["Выбрать", "Сидячий образ жизни",
                                 "Умеренная активность (занятия 1-3 раз в неделю)",
@@ -174,6 +173,7 @@ class RegistrationWindow(QWidget, Ui_Form):
                             self.lineEdit_keyword.text().strip(),
                             self.lineEdit_calories.text().strip()))
             self.connection.commit()
+            self.main_window = MainWindow(float(self.lineEdit_calories.text().strip()), self.lineEdit_login.text().strip())
             self.close()
         else:
             return
@@ -191,8 +191,3 @@ def exception_hook(exctype, value, traceback):
 sys.excepthook = exception_hook
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = RegistrationWindow()
-    ex.show()
-    sys.exit(app.exec())
