@@ -4,7 +4,6 @@ import sqlite3
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel
 from hello_window_py import Ui_Form
 from main_window.class_main_window import MainWindow
-from main_window import add_form
 from reg_window.class_reg_window import RegistrationWindow
 
 
@@ -13,6 +12,9 @@ class HelloWindow(QWidget, Ui_Form):
     def __init__(self):
         super(HelloWindow, self).__init__()
         self.setupUi(self)
+
+        self.setMinimumSize(self.size())
+        self.setMaximumSize(self.size())
 
         self.connection = sqlite3.connect(r"../users.db")
 
@@ -45,9 +47,11 @@ class HelloWindow(QWidget, Ui_Form):
 
             else:
                 calories = cursor.execute(f"SELECT calories FROM user WHERE id_user='{login}'").fetchall()[0][0]
-                self.main_window = MainWindow(calories, login)
+                self.main_window = MainWindow(calories, login, self)
                 self.main_window.show()
-                self.close()
+                self.lineEdit_pas.clear()
+                self.lineEdit_log.clear()
+                self.hide()
 
 
 if __name__ == '__main__':

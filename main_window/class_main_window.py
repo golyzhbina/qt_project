@@ -1,9 +1,10 @@
 import sys
 from sqlite3 import connect
 
-from PyQt5.QtCore import QRect
+from PyQt5.QtCore import QRect, Qt
+from PyQt5.QtGui import QColor, QBrush, QPalette, QFont
 from PyQt5.QtWidgets import QMainWindow, QApplication, QHeaderView, QVBoxLayout, QTableWidgetItem
-from .main_window_py import Ui_MainWindow
+from .main_form_py import Ui_MainWindow
 from .add_form.class_add_form import AddWindow
 from .calendar_window.class_calendar import Calendar
 
@@ -16,12 +17,23 @@ from datetime import datetime
 
 class MainWindow(QMainWindow, Ui_MainWindow):
 
-    def __init__(self, calories, login):
+    def __init__(self, calories, login, hello_wind):
         super().__init__()
         self.setupUi(self)
 
+        self.setMinimumSize(self.size())
+        self.setMaximumSize(self.size())
+
+        self.hello_wind = hello_wind
         self.login = login
-        self.label_login.setText(f"Логин: {login}")
+        self.label_login.setText(f"Логин: {login}  ")
+        self.label_login.setFont(QFont("Book Antiqua", 11, QFont.Bold))
+        palette = self.label_login.palette()
+        palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
+        self.label_login.setPalette(palette)
+        self.label_login.setAlignment(Qt.AlignRight)
+
+        self.tabWidget_menu.setCurrentIndex(0)
 
         self.connection = connect(r"..\users.db")
         self.dict_tab_tables = {0: self.tableWidget_breakfast,
@@ -39,20 +51,32 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_din_del.clicked.connect(self.del_product)
         self.pushButton_meal_del.clicked.connect(self.del_product)
 
+        self.pushButton_break_change.clicked.connect(self.change_product)
+        self.pushButton_lunch_change.clicked.connect(self.change_product)
+        self.pushButton_din_change.clicked.connect(self.change_product)
+        self.pushButton_meal_change.clicked.connect(self.change_product)
+
+        self.pushButton_ex.clicked.connect(self.ex)
+
         self.set_headers()
 
         self.quality_proteins = 0
         self.quality_fats = 0
         self.quality_carbohydrates = 0
         self.quality_calories = 0
-        self.calories_day = calories
-        self.label_cal_day.setText(f"Норма калорий: {str(self.calories_day)}")
 
-        self.count_change = 0
-        self.tableWidget_breakfast.itemChanged.connect(self.check_change)
-        self.tableWidget_lunch.itemChanged.connect(self.check_change)
-        self.tableWidget_dinner.itemChanged.connect(self.check_change)
-        self.tableWidget_meal.itemChanged.connect(self.check_change)
+        self.calories_day = calories
+        palette = self.label_cal_day.palette()
+        palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
+        self.label_cal_day.setPalette(palette)
+        self.label_cal_day.setText(f"Норма калорий: {str(self.calories_day)}  ")
+        self.label_cal_day.setFont(QFont("Book Antiqua", 11, QFont.Bold))
+        self.label_cal_day.setAlignment(Qt.AlignRight)
+
+        self.tableWidget_breakfast.itemClicked.connect(self.select_row)
+        self.tableWidget_lunch.itemClicked.connect(self.select_row)
+        self.tableWidget_dinner.itemClicked.connect(self.select_row)
+        self.tableWidget_meal.itemClicked.connect(self.select_row)
 
         self.dict_months = {'01': "января", '02': "февраля", '03': "марта", '04': "апреля", '05': "мая",
                             '06': "июня", '07': "июля", '08': "августа", '09': "сентября", '10': "октября",
@@ -63,15 +87,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.day = datetime.now().date()
         self.day_list = str(datetime.now().date()).split("-")
-        self.label_day.setText(f"{self.day_list[-1].replace('0', '')} {self.dict_months[self.day_list[1]]}, "
-                               f"{self.dict_week[str(self.day.weekday())]}")
+
+        self.set_day()
+        self.set_info()
 
         self.pushButton_get_day.clicked.connect(self.get_date)
 
-
         self.fig, self.ax = plt.subplots()
-        self.ax.pie(array([1]), radius=1, wedgeprops=dict(width=0.3))
-        self.ax.pie(array([[1], [1], [1]]).sum(axis=1), radius=1-0.3, wedgeprops=dict(width=0.3, edgecolor='w'))
+        self.ax.pie(array([[1], [1], [1]]).sum(axis=1), radius=1, wedgeprops=dict(width=0.3, edgecolor='w'))
 
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self)
@@ -80,7 +103,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.vbox.addWidget(self.canvas)
 
         self.setLayout(self.vbox)
-        self.vbox.setGeometry(QRect(420, 20, 300, 300))
+        self.vbox.setGeometry(QRect(420, 50, 250, 250))
 
         self.load_tables()
 
@@ -91,55 +114,50 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if self.quality_calories > self.calories_day:
 
-            self.ax.pie(array([self.quality_calories, self.quality_calories - self.calories_day]),
-                        radius=1, wedgeprops=dict(width=0.3), colors=["c", "gray"])
             self.ax.pie(array([[self.quality_proteins], [self.quality_fats], [self.quality_carbohydrates]]).sum(axis=1),
-                        radius=1-0.3, wedgeprops=dict(width=0.3, edgecolor='w'), colors=["silver", "darkorange", "dodgerblue"])
+                        radius=1, wedgeprops=dict(width=0.5, edgecolor='w'),
+                        colors=["dimgray", "darkorange", "dodgerblue"])
 
         elif self.calories_day > self.quality_calories and self.quality_calories != 0:
 
-            self.ax.pie(array([self.quality_calories,  - self.quality_calories + self.calories_day]),
-                        radius=1, wedgeprops=dict(width=0.3), colors=["c", "gray"])
             self.ax.pie(array([[self.quality_proteins], [self.quality_fats], [self.quality_carbohydrates]]).sum(axis=1),
-                        radius=1-0.3, wedgeprops=dict(width=0.3, edgecolor='w'),
-                        colors=["silver", "darkorange", "dodgerblue"])
+                        radius=1, wedgeprops=dict(width=0.5, edgecolor='w'),
+                        colors=["dimgray", "darkorange", "dodgerblue"])
 
         elif self.quality_calories == 0:
-            self.ax.pie(array([1]),
-                        radius=1, wedgeprops=dict(width=0.3), colors=["c"])
+
             self.ax.pie(array([[1], [1], [1]]).sum(axis=1),
-                        radius=1-0.3, wedgeprops=dict(width=0.3, edgecolor='w'),
-                        colors=["silver", "darkorange", "dodgerblue"])
+                        radius=1, wedgeprops=dict(width=0.5, edgecolor='w'),
+                        colors=["dimgray", "darkorange", "dodgerblue"])
 
         self.canvas.draw()
 
     def add_product(self):
 
         self.add_window = AddWindow(self.dict_tab_tables[self.tabWidget_menu.currentIndex()], self.day, self.login,
-                                    self.dict_tab_tables[self.tabWidget_menu.currentIndex()].objectName().split("_")[-1])
+                            self.dict_tab_tables[self.tabWidget_menu.currentIndex()].objectName().split("_")[-1], self)
         self.add_window.show()
 
     def calc_calories(self):
         try:
-            self.count_change = 0
-            i = self.tabWidget_menu.currentIndex()
-            count_row = self.dict_tab_tables[i].rowCount()
-            self.quality_calories += float(self.dict_tab_tables[i].item(count_row - 1, 2).text())
-            self.quality_proteins += float(self.dict_tab_tables[i].item(count_row - 1, 3).text())
-            self.quality_fats += float(self.dict_tab_tables[i].item(count_row - 1, 4).text())
-            self.quality_carbohydrates += float(self.dict_tab_tables[i].item(count_row - 1, 5).text())
+            for i in range(4):
+                table = self.dict_tab_tables[i]
+                row = table.rowCount()
+                for j in range(row):
+                    if j == 2:
+                        self.quality_calories += float(table.item(row, j).text())
+                    elif j == 3:
+                        self.quality_proteins += float(table.item(row, j).text())
+                    elif j == 4:
+                        self.quality_fats += float(table.item(row, j).text())
+                    elif j == 5:
+                        self.quality_carbohydrates += float(table.item(row, j).text())
+
+            self.set_info()
         except AttributeError:
             return
 
         self.draw()
-
-    def check_change(self):
-
-        if self.count_change == 5:
-            self.calc_calories()
-        else:
-            self.count_change += 1
-            print("done")
 
     def load_tables(self):
 
@@ -157,14 +175,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         cursor = self.connection.cursor()
         data = cursor.execute(f"SELECT * FROM food_day WHERE id_user='{self.login}' AND day='{str(self.day)}'").fetchall()
-        print("-"* 30)
         if len(data) == 0:
 
             self.quality_calories = 0
             self.quality_proteins = 0
             self.quality_fats = 0
             self.quality_carbohydrates = 0
-
+            self.set_info()
             self.draw()
 
             return
@@ -185,12 +202,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 table.setRowCount(table.rowCount() + 1)
                 for j, elem in enumerate(data[i]):
                     table.setItem(k, j, QTableWidgetItem(str(elem)))
-
-        self.quality_calories /= 2
-        self.quality_proteins /= 2
-        self.quality_fats /= 2
-        self.quality_carbohydrates /= 2
-        print(self.quality_calories, self.quality_proteins, self.quality_fats, self.quality_carbohydrates)
+                    if j == 4:
+                        table.item(k, j).setBackground(QColor(255, 120, 1))
+                        table.item(k, j).setForeground(QBrush(QColor(255, 255, 255)))
+                    elif j == 3:
+                        table.item(k, j).setBackground(QColor(90, 90, 90))
+                        table.item(k, j).setForeground(QBrush(QColor(255, 255, 255)))
+                    elif j == 5:
+                        table.item(k, j).setBackground(QColor(0, 143, 238))
+                        table.item(k, j).setForeground(QBrush(QColor(255, 255, 255)))
+        self.set_info()
+        self.calc_calories()
 
     def get_date(self):
 
@@ -220,8 +242,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         dct_tables = {"break": "breakfast", "lunch": "lunch", "din": "dinner", "meal": "meal"}
         per = dct_tables[self.sender().objectName().split("_")[1]]
         table = self.dict_tab_tables[["breakfast", "lunch", "dinner", "meal"].index(per)]
-        select_item = table.selectedItems()
-
+        select_item = table.selectedItems()[::6]
+        select_item = select_item[::-1]
         cursor = self.connection.cursor()
 
         for i in range(len(select_item)):
@@ -240,9 +262,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.quality_carbohydrates -= float(info[5])
             self.load_tables()
             self.draw()
+            self.set_info()
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = MainWindow()
-    ex.show()
-    sys.exit(app.exec())
+    def select_row(self):
+        per = self.sender().objectName().split("_")[1]
+        table = self.dict_tab_tables[["breakfast", "lunch", "dinner", "meal"].index(per)]
+        select_item = table.selectedItems()[0]
+        row = select_item.row()
+        for i in range(6):
+            table.item(row, i).setSelected(True)
+
+    def change_product(self):
+
+        dct_tables = {"break": "breakfast", "lunch": "lunch", "din": "dinner", "meal": "meal"}
+        per = dct_tables[self.sender().objectName().split("_")[1]]
+        table = self.dict_tab_tables[["breakfast", "lunch", "dinner", "meal"].index(per)]
+        select_item = table.selectedItems()
+        info = list(map(lambda x: x.text(), select_item))
+        self.del_product()
+        self.add_wind = AddWindow(table, self.day, self.login, per, self, info)
+        self.add_wind.show()
+
+    def set_info(self):
+
+        self.label_info.setText(f"Белки: {self.quality_proteins}\nЖиры: {self.quality_fats}\n"
+                                f"Углеводы: {self.quality_carbohydrates}\nСъедено калорий: {self.quality_calories}\n"
+                                f"Осталось калорий: {self.calories_day - self.quality_calories}")
+
+    def ex(self):
+
+        self.hello_wind.show()
+        self.close()
+
+    def set_day(self):
+
+        palette = self.label_day.palette()
+        palette.setColor(QPalette.WindowText, QColor(50, 50, 50))
+        self.label_day.setPalette(palette)
+        self.label_day.setText(f"{self.day_list[-1].replace('0', '')} {self.dict_months[self.day_list[1]]}, "
+                               f"{self.dict_week[str(self.day.weekday())]}")

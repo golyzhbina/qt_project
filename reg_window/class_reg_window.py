@@ -12,6 +12,9 @@ class RegistrationWindow(QWidget, Ui_Form):
         super(RegistrationWindow, self).__init__()
         self.setupUi(self)
 
+        self.setMinimumSize(self.size())
+        self.setMaximumSize(self.size())
+
         self.lineEdit_login.textChanged.connect(self.check_login)
         self.lineEdit_weight.textChanged.connect(self.check_weight)
         self.lineEdit_hight.textChanged.connect(self.check_hight)

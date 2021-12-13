@@ -37,7 +37,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>392</width>
+      <width>391</width>
       <height>411</height>
      </rect>
     </property>
@@ -227,7 +227,7 @@ background-color: rgb(111, 111, 111);</string>
      <enum>QTabWidget::South</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_breakfast">
      <property name="font">
@@ -456,37 +456,47 @@ font: 8pt &quot;Book Antiqua&quot;;</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt; font-weight:600; color:#ffffff;&quot;&gt;Завтрак&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_break_add">
+     <widget class="QWidget" name="">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>140</x>
         <y>20</y>
-        <width>71</width>
-        <height>21</height>
+        <width>239</width>
+        <height>26</height>
        </rect>
       </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(227, 227, 227);font: 9pt &quot;Book Antiqua&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Добавить</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_break_del">
-      <property name="geometry">
-       <rect>
-        <x>306</x>
-        <y>20</y>
-        <width>73</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(227, 227, 227);font: 9pt &quot;Book Antiqua&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Удалить</string>
-      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="pushButton_break_add">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);font: 9pt &quot;Book Antiqua&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Добавить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_break_change">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);font: 9pt &quot;Book Antiqua&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Изменить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_break_del">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);font: 9pt &quot;Book Antiqua&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Удалить</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_lunch">
@@ -527,37 +537,47 @@ font: 8pt &quot;Book Antiqua&quot;;</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt; font-weight:600; color:#ffffff;&quot;&gt;Обед&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_lunch_add">
+     <widget class="QWidget" name="">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>140</x>
         <y>20</y>
-        <width>71</width>
-        <height>21</height>
+        <width>239</width>
+        <height>26</height>
        </rect>
       </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(227, 227, 227);font: 9pt &quot;Book Antiqua&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Добавить</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_lunch_del">
-      <property name="geometry">
-       <rect>
-        <x>306</x>
-        <y>20</y>
-        <width>73</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(227, 227, 227);font: 9pt &quot;Book Antiqua&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Удалить</string>
-      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="pushButton_lunch_add">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);font: 9pt &quot;Book Antiqua&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Добавить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_lunch_change">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);font: 9pt &quot;Book Antiqua&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Изменить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_lunch_del">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);font: 9pt &quot;Book Antiqua&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Удалить</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_dinner">
@@ -598,62 +618,56 @@ font: 8pt &quot;Book Antiqua&quot;;</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt; font-weight:600; color:#ffffff;&quot;&gt;Ужин&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_din_add">
+     <widget class="QWidget" name="">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>140</x>
         <y>20</y>
-        <width>71</width>
-        <height>21</height>
+        <width>239</width>
+        <height>26</height>
        </rect>
       </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(227, 227, 227);
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="pushButton_din_change">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);
 font: 9pt &quot;Book Antiqua&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Добавить</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_dinl_del">
-      <property name="geometry">
-       <rect>
-        <x>306</x>
-        <y>20</y>
-        <width>73</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(227, 227, 227);
+         </property>
+         <property name="text">
+          <string>Добавить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_din_add">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);
 font: 9pt &quot;Book Antiqua&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Удалить</string>
-      </property>
+         </property>
+         <property name="text">
+          <string>Изменить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_dinl_del">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);
+font: 9pt &quot;Book Antiqua&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Удалить</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_meal">
      <attribute name="title">
       <string>Tab 2</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_meal_del">
-      <property name="geometry">
-       <rect>
-        <x>306</x>
-        <y>20</y>
-        <width>73</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(227, 227, 227);
-font: 9pt &quot;Book Antiqua&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Удалить</string>
-      </property>
-     </widget>
      <widget class="QTableWidget" name="tableWidget_meal">
       <property name="geometry">
        <rect>
@@ -689,22 +703,50 @@ font: 8pt &quot;Book Antiqua&quot;;</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt; font-weight:600; color:#ffffff;&quot;&gt;Перекус&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_meal_add">
+     <widget class="QWidget" name="">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>140</x>
         <y>20</y>
-        <width>71</width>
-        <height>21</height>
+        <width>239</width>
+        <height>26</height>
        </rect>
       </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(227, 227, 227);
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QPushButton" name="pushButton_meal_add_2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);
 font: 9pt &quot;Book Antiqua&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Добавить</string>
-      </property>
+         </property>
+         <property name="text">
+          <string>Добавить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_meal_change">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);
+font: 9pt &quot;Book Antiqua&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Изменить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_meal_del">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(227, 227, 227);
+font: 9pt &quot;Book Antiqua&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Удалить</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </widget>
@@ -772,7 +814,7 @@ font: 8pt &quot;Book Antiqua&quot;;</string>
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>451</y>
+      <y>450</y>
       <width>101</width>
       <height>23</height>
      </rect>
@@ -874,6 +916,130 @@ background-color: rgb(218, 218, 218);</string>
     </property>
     <property name="text">
      <string>Выбрать число</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_info">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>290</y>
+      <width>291</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 10pt &quot;Book Antiqua&quot;;</string>
+    </property>
+    <property name="text">
+     <string> </string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_ex">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>0</y>
+      <width>71</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>218</red>
+          <green>218</green>
+          <blue>218</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>218</red>
+          <green>218</green>
+          <blue>218</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>218</red>
+          <green>218</green>
+          <blue>218</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>218</red>
+          <green>218</green>
+          <blue>218</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>218</red>
+          <green>218</green>
+          <blue>218</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>218</red>
+          <green>218</green>
+          <blue>218</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>218</red>
+          <green>218</green>
+          <blue>218</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>218</red>
+          <green>218</green>
+          <blue>218</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>218</red>
+          <green>218</green>
+          <blue>218</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 9pt &quot;Book Antiqua&quot;;
+background-color: rgb(218, 218, 218);</string>
+    </property>
+    <property name="text">
+     <string>Выйти</string>
     </property>
    </widget>
   </widget>

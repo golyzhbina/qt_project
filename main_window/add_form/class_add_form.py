@@ -1,16 +1,21 @@
 import sys
 from sqlite3 import connect
 
+from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView, QAbstractItemView
 from .add_form_py import Ui_Form
 
 
 class AddWindow(QWidget, Ui_Form):
 
-    def __init__(self, main_table, day, login, period):
+    def __init__(self, main_table, day, login, period, obj, info_prod=None):
         super().__init__()
         self.setupUi(self)
 
+        self.setMinimumSize(self.size())
+        self.setMaximumSize(self.size())
+
+        self.obj = obj
         self.period = period
         self.login = login
         self.day = day
@@ -21,8 +26,12 @@ class AddWindow(QWidget, Ui_Form):
         self.load_data("""SELECT * FROM product""")
         self.flag_change = True
 
+        self.info_product = info_prod
+        if self.info_product:
+            self.change_product()
+
         self.text_search.textChanged.connect(lambda: self.search()
-        if len(self.text_search.toPlainText()) and self.flag_change else None)
+                                if len(self.text_search.toPlainText()) and self.flag_change else None)
 
         self.table.cellClicked.connect(lambda: self.print_name(self.table.selectedItems()[0])
         if self.table.selectedItems()[0].column() == 0 else None)
@@ -32,6 +41,8 @@ class AddWindow(QWidget, Ui_Form):
         self.button_cancel.clicked.connect(self.close)
         self.button_add.clicked.connect(self.add_product)
         self.pushButton_ok.clicked.connect(self.close)
+
+        self.table.itemClicked.connect(self.select_row)
 
     def load_data(self, query):
 
@@ -50,6 +61,11 @@ class AddWindow(QWidget, Ui_Form):
                 self.table.rowCount() + 1)
             for j, elem in enumerate(row):
                 self.table.setItem(i, j, QTableWidgetItem(str(elem)))
+
+                if i % 2 == 0:
+                    self.table.item(i, j).setBackground(QColor(245, 245, 245))
+                else:
+                    self.table.item(i, j).setBackground(QColor(225, 225, 225))
 
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
@@ -98,9 +114,23 @@ class AddWindow(QWidget, Ui_Form):
                        "product_proteins, product_fats, product_carb) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
                        [self.login, str(self.day), self.period, *data])
         self.connection_us.commit()
+        self.obj.load_tables()
 
-        for i in range(6):
-            self.main_table.setItem(row, i, QTableWidgetItem(data[i]))
+    def select_row(self):
+
+        select_item = self.table.selectedItems()[0]
+        row = select_item.row()
+
+        for i in range(5):
+            self.table.item(row, i).setSelected(True)
+
+    def change_product(self):
+        self.text_search.setText(self.info_product[0])
+        self.label_info.setText(f"Калории: {self.info_product[2]}\n"
+                                f"Белки: {self.info_product[3]}\n"
+                                f"Жиры: {self.info_product[4]}\n"
+                                f"Углеводы: {self.info_product[5]}")
+        self.textEdit_weight.setText(self.info_product[1])
 
 
 sys._excepthook = sys.excepthook
