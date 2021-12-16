@@ -8,7 +8,7 @@ from .add_py import Ui_Form
 
 class AddWindow(QWidget, Ui_Form):
 
-    def __init__(self, main_table, obj, day=None, login=None, period=None, info_prod=None):
+    def __init__(self, main_table, obj, day=None, period=None):
         super().__init__()
         self.setupUi(self)
 
@@ -17,18 +17,20 @@ class AddWindow(QWidget, Ui_Form):
 
         self.obj = obj
         self.period = period
-        self.login = login
-        self.day = day
+        self.login = self.obj.login
+        self.day = self.obj.day
         self.main_table = main_table
         self.connection_pro = connect(r"../product_base.db")
         self.connection_us = connect(r"../users.db")
-        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.load_data("""SELECT * FROM product""")
-        self.flag_change = True
 
-        self.info_product = info_prod
-        if self.info_product:
-            self.change_product()
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table.setRowCount(0)
+        self.table.setColumnCount(5)
+        self.table.setHorizontalHeaderLabels(["Название", "Белки", "Жиры", "Углеводы", "Калории"])
+
+        self.load_data("""SELECT * FROM product""")
+        self.load_data(f"SELECT * FROM user_product WHERE id_user='{self.login}'")
+        self.flag_change = True
 
         self.text_search.textChanged.connect(lambda: self.search()
                                 if len(self.text_search.toPlainText()) and self.flag_change else None)
@@ -47,24 +49,29 @@ class AddWindow(QWidget, Ui_Form):
 
         cursor = self.connection_pro.cursor()
         data = cursor.execute(query).fetchall()
-        self.load_table(data)
+
+        if len(data[0]) > 0:
+            self.load_table(data)
 
     def load_table(self, data):
-        data = list(map(lambda x: x[1:], data))
-        self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(["Название", "Белки", "Жиры", "Углеводы", "Калории"])
-        self.table.setRowCount(0)
+        data = list(map(lambda x: x[1:], data)) if len(data[0]) == 6 else list(map(lambda x: x[2:], data))
+        r = self.table.rowCount()
+
 
         for i, row in enumerate(data):
             self.table.setRowCount(
                 self.table.rowCount() + 1)
+            print(self.table.rowCount())
             for j, elem in enumerate(row):
-                self.table.setItem(i, j, QTableWidgetItem(str(elem)))
 
-                if i % 2 == 0:
-                    self.table.item(i, j).setBackground(QColor(245, 245, 245))
+                self.table.setItem(r, j, QTableWidgetItem(str(elem)))
+
+                if r % 2 == 0:
+                    self.table.item(r, j).setBackground(QColor(245, 245, 245))
                 else:
-                    self.table.item(i, j).setBackground(QColor(225, 225, 225))
+                    self.table.item(r, j).setBackground(QColor(225, 225, 225))
+            r += 1
+            print(r, self.table.rowCount())
 
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
@@ -93,12 +100,14 @@ class AddWindow(QWidget, Ui_Form):
             weight = 0
         try:
             data = cursor.execute(f"""SELECT * FROM product WHERE name LIKE '{name}'""").fetchall()[0]
-            self.label_info.setText(f"Калории: {round(data[-1] * weight, 1)}\n"
-                                    f"Белки: {round(data[2] * weight, 1)}\n"
-                                    f"Жиры: {round(data[3] * weight, 1)}\n"
-                                    f"Углеводы: {round(data[4] * weight, 1)}")
+
         except IndexError:
-            return
+            data = cursor.execute(
+                f"""SELECT * FROM user_product WHERE product_name LIKE '{name}' AND id_user='{self.login}'""").fetchall()[0]
+        self.label_info.setText(f"Калории: {round(data[-1] * weight, 1)}\n"
+                                f"Белки: {round(data[2] * weight, 1)}\n"
+                                f"Жиры: {round(data[3] * weight, 1)}\n"
+                                f"Углеводы: {round(data[4] * weight, 1)}")
 
     def add_product(self):
 

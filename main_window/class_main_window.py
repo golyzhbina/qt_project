@@ -129,8 +129,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def add_product(self):
 
-        self.add_window = AddWindow(self.dict_tab_tables[self.tabWidget_menu.currentIndex()], self.day, self.login,
-                            self.dict_tab_tables[self.tabWidget_menu.currentIndex()].objectName().split("_")[-1], self)
+        self.add_window = AddWindow(self.dict_tab_tables[self.tabWidget_menu.currentIndex()], self,
+                            self.dict_tab_tables[self.tabWidget_menu.currentIndex()].objectName().split("_")[-1])
         self.add_window.show()
 
     def calc_calories(self):
