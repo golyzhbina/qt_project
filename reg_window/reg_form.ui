@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>280</width>
-    <height>602</height>
+    <height>0</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -144,6 +144,9 @@ font: 9pt &quot;Book Antiqua&quot;;</string>
      <widget class="QLineEdit" name="lineEdit_login">
       <property name="styleSheet">
        <string notr="true">font: 10pt &quot;Book Antiqua&quot;;</string>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </item>

@@ -1,4 +1,3 @@
-import sys
 from sqlite3 import connect
 
 from PyQt5.QtCore import QRect, Qt
@@ -50,11 +49,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_lunch_del.clicked.connect(self.del_product)
         self.pushButton_din_del.clicked.connect(self.del_product)
         self.pushButton_meal_del.clicked.connect(self.del_product)
-
-        self.pushButton_break_change.clicked.connect(self.change_product)
-        self.pushButton_lunch_change.clicked.connect(self.change_product)
-        self.pushButton_din_change.clicked.connect(self.change_product)
-        self.pushButton_meal_change.clicked.connect(self.change_product)
 
         self.pushButton_ex.clicked.connect(self.ex)
 
@@ -256,11 +250,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                            f"AND product_name='{info[0]}' AND product_weight={float(info[1])}")
             self.connection.commit()
 
+            row = select_item[i].row()
+            table.removeRow(row)
+
             self.quality_calories -= float(info[2])
             self.quality_proteins -= float(info[3])
             self.quality_fats -= float(info[4])
             self.quality_carbohydrates -= float(info[5])
-            self.load_tables()
             self.draw()
             self.set_info()
 
@@ -271,17 +267,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         row = select_item.row()
         for i in range(6):
             table.item(row, i).setSelected(True)
-
-    def change_product(self):
-
-        dct_tables = {"break": "breakfast", "lunch": "lunch", "din": "dinner", "meal": "meal"}
-        per = dct_tables[self.sender().objectName().split("_")[1]]
-        table = self.dict_tab_tables[["breakfast", "lunch", "dinner", "meal"].index(per)]
-        select_item = table.selectedItems()
-        info = list(map(lambda x: x.text(), select_item))
-        self.del_product()
-        self.add_wind = AddWindow(table, self.day, self.login, per, self, info)
-        self.add_wind.show()
 
     def set_info(self):
 

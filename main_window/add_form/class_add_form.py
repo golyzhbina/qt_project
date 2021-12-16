@@ -2,13 +2,13 @@ import sys
 from sqlite3 import connect
 
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView, QAbstractItemView
-from .add_form_py import Ui_Form
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView, QAbstractItemView, QApplication
+from .add_py import Ui_Form
 
 
 class AddWindow(QWidget, Ui_Form):
 
-    def __init__(self, main_table, day, login, period, obj, info_prod=None):
+    def __init__(self, main_table, obj, day=None, login=None, period=None, info_prod=None):
         super().__init__()
         self.setupUi(self)
 
@@ -20,7 +20,7 @@ class AddWindow(QWidget, Ui_Form):
         self.login = login
         self.day = day
         self.main_table = main_table
-        self.connection_pro = connect(r"..\product_base.db")
+        self.connection_pro = connect(r"C:\Users\Lenovo\PycharmProject\qt_project\product_base.db")
         self.connection_us = connect(r"..\users.db")
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.load_data("""SELECT * FROM product""")
@@ -40,7 +40,6 @@ class AddWindow(QWidget, Ui_Form):
 
         self.button_cancel.clicked.connect(self.close)
         self.button_add.clicked.connect(self.add_product)
-        self.pushButton_ok.clicked.connect(self.close)
 
         self.table.itemClicked.connect(self.select_row)
 
@@ -103,18 +102,29 @@ class AddWindow(QWidget, Ui_Form):
 
     def add_product(self):
 
-        cursor = self.connection_us.cursor()
         info = self.label_info.text().split('\n')
         info = list(map(lambda x: x.split()[-1], info))
         data = [self.text_search.toPlainText(), self.textEdit_weight.toPlainText(), *info]
         row = self.main_table.rowCount()
         self.main_table.setRowCount(row + 1)
 
-        cursor.execute("INSERT INTO food_day(id_user, day, period, product_name, product_weight, product_calor,"
-                       "product_proteins, product_fats, product_carb) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                       [self.login, str(self.day), self.period, *data])
-        self.connection_us.commit()
-        self.obj.load_tables()
+        if self.day:
+            cursor = self.connection_us.cursor()
+            cursor.execute("INSERT INTO food_day(id_user, day, period, product_name, product_weight, product_calor,"
+                           "product_proteins, product_fats, product_carb) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                           [self.login, str(self.day), self.period, *data])
+            self.connection_us.commit()
+            self.obj.load_tables()
+        else:
+            for i in range(6):
+                self.main_table.setItem(row, i, QTableWidgetItem(data[i]))
+
+                if row % 2 == 0:
+                    self.main_table.item(row, i).setBackground(QColor(245, 245, 245))
+                else:
+                    self.main_table.item(row, i).setBackground(QColor(225, 225, 225))
+
+            self.obj.calc()
 
     def select_row(self):
 
@@ -142,3 +152,9 @@ def exception_hook(exctype, value, traceback):
 
 
 sys.excepthook = exception_hook
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = AddWindow(main_table=None)
+    ex.show()
+    sys.exit(app.exec())

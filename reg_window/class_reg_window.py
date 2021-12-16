@@ -80,7 +80,7 @@ class RegistrationWindow(QWidget, Ui_Form):
             self.warning.setText("Рост должен быть числом")
             return False
 
-        elif h.replace(".", "").replace(",", "").isnumeric() and not 0.8 < float(h.replace(".", "").replace(",", "")) < 2.15:
+        elif h.replace(".", "").replace(",", "").isnumeric() and not 0.8 < float(h.replace(",", ".")) < 2.15:
             self.warning.setText("Введённое значение роста некорректно")
 
         elif h.replace(".", "").replace(",", "").isnumeric():
