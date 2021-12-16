@@ -4,7 +4,7 @@ from sqlite3 import connect
 
 from PyQt5.QtGui import QColor, QPalette
 from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QHeaderView, QTableWidgetItem
-from add_form import Ui_Form
+from .add_form import Ui_Form
 from main_window.add_form.class_add_form import AddWindow
 
 
@@ -18,7 +18,7 @@ class AddProduct(QWidget, Ui_Form):
         pal.setColor(QPalette.WindowText, QColor(255, 255, 255))
         self.waring.setPalette(pal)
 
-        self.connection_prod = connect(r"C:\Users\Lenovo\PycharmProject\qt_project\product_base.db")
+        self.connection_prod = connect(r"C:\Users\User\PycharmProjects\qt_project/product_base.db")
 
         self.login = login
         self.flag_value = False

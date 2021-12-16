@@ -23,8 +23,9 @@ class HelloWindow(QWidget, Ui_Form):
 
     def registration(self):
 
-        self.reg_window = RegistrationWindow()
+        self.reg_window = RegistrationWindow(self)
         self.reg_window.show()
+        self.hide()
 
     def ex(self):
         cursor = self.connection.cursor()

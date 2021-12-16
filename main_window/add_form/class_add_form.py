@@ -20,8 +20,8 @@ class AddWindow(QWidget, Ui_Form):
         self.login = login
         self.day = day
         self.main_table = main_table
-        self.connection_pro = connect(r"C:\Users\Lenovo\PycharmProject\qt_project\product_base.db")
-        self.connection_us = connect(r"..\users.db")
+        self.connection_pro = connect(r"../product_base.db")
+        self.connection_us = connect(r"../users.db")
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.load_data("""SELECT * FROM product""")
         self.flag_change = True

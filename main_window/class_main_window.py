@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QHeaderView, QVBoxLayout,
 from .main_form_py import Ui_MainWindow
 from .add_form.class_add_form import AddWindow
 from .calendar_window.class_calendar import Calendar
+from .menu.class_menu import Menu
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -16,7 +17,7 @@ from datetime import datetime
 
 class MainWindow(QMainWindow, Ui_MainWindow):
 
-    def __init__(self, calories, login, hello_wind):
+    def __init__(self, calories, login, hello_wind=None):
         super().__init__()
         self.setupUi(self)
 
@@ -50,7 +51,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_din_del.clicked.connect(self.del_product)
         self.pushButton_meal_del.clicked.connect(self.del_product)
 
-        self.pushButton_ex.clicked.connect(self.ex)
+        self.pushButton_ex.clicked.connect(self.show_menu)
 
         self.set_headers()
 
@@ -286,3 +287,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.label_day.setPalette(palette)
         self.label_day.setText(f"{self.day_list[-1].replace('0', '')} {self.dict_months[self.day_list[1]]}, "
                                f"{self.dict_week[str(self.day.weekday())]}")
+
+    def show_menu(self):
+
+        self.menu = Menu(self)
+        self.menu.show()
